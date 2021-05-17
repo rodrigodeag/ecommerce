@@ -1,25 +1,16 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
-    'name' => 'hcodebr/ecommerce',
+    'reference' => 'ce02b8c104dcedcb6651dd5bcd63597512183963',
+    'name' => 'rodrigodeag/ecommerce',
   ),
   'versions' => 
   array (
-    'hcodebr/ecommerce' => 
-    array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => NULL,
-    ),
     'phpmailer/phpmailer' => 
     array (
       'pretty_version' => 'v5.2.22',
@@ -37,6 +28,15 @@
       array (
       ),
       'reference' => '5bfdf4602b8adb0e80b222fa29ac559aa9c06abf',
+    ),
+    'rodrigodeag/ecommerce' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'ce02b8c104dcedcb6651dd5bcd63597512183963',
     ),
     'slim/slim' => 
     array (
