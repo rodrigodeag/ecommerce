@@ -160,9 +160,7 @@ $app->post("/admin/forgot/reset", function(){
 		"header"=>false,
 		"footer"=>false
 	]);
-	$page->setTpl("forgot-reset-success")
-	));
-
+	$page->setTpl("forgot-reset-success");
 });
 
 $app->get("/admin/categories", function(){
@@ -218,7 +216,7 @@ $app->get("/admin/categories/:idcategory", function($idcategory){
 
 	$page = new PageAdmin();
 	$page->setTpl("categories-update", [
-		'category'=>$category->getValues();
+		'category'=>$category->getValues()
 	]);
 });
 
@@ -235,6 +233,18 @@ $app->post("/admin/categories/:idcategory", function($idcategory){
 	header('Location: /admin/categories');
 	exit;
 
+});
+
+$app->get("/categories/:idcategory", function($idcategory){
+	
+	$category = new Category();
+	$category->get((int)$idcategory);
+
+	$page = new Page();
+	$page->setTpl("category", [
+		'category'=>$category->getValues(),
+		'products'=>[]
+	]);
 });
 
 $app->run();
