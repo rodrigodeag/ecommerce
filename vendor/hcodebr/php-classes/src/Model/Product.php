@@ -4,6 +4,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Mailer;
 
 class Product extends Model
 {
@@ -13,24 +14,36 @@ class Product extends Model
 		return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
 	}
 
+	public static function checkList($list)
+	{
+		foreach ($list as &$row) {
+			$p = new Product();
+			$p->setData($row);
+			$row = $p->getValues();
+
+		}
+
+		return $list;
+	}
+
 	public function save()
 	{
 		$sql = new Sql();
-		$results = $sql->select("CALL sp_products_save(:idproducts, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweigth, :desurl)", array(
+		$results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl)", array(
 			":idproduct"=>$this->getidproduct(),
 			":desproduct"=>$this->getdesproduct(),
 			":vlprice"=>$this->getvlprice(),
 			":vlwidth"=>$this->getvlwidth(),
 			":vlheight"=>$this->getvlheight(),
 			":vllength"=>$this->getvllength(),
-			":vlweigth"=>$this->getvlweigth(),
+			":vlweight"=>$this->getvlweigth(),
 			":desurl"=>$this->getdesurl()
 		));
 		$this->setData($results[0]);
 		
 	}
 
-	public function get($idcategory)
+	public function get($idproduct)
 	{
 		$sql = new Sql();
 		$results = $sql->select("SELECT * FROM tb_products WHERE idproduct = :idproduct",[
@@ -55,15 +68,15 @@ class Product extends Model
 			"site".DIRECTORY_SEPARATOR.
 			"img".DIRECTORY_SEPARATOR.
 			"products".DIRECTORY_SEPARATOR.
-			$this->getidproduct()."jpg"
+			$this->getidproduct().".jpg"
 		)) 
 		{
 			$url = "/res/site/img/products/".$this->getidproduct()."jpg";
 		} else {
-			$url = "/res/site/img/products/product.jpg";
+			$url = "/res/site/img/product.jpg";
 		}
 
-		return $this->setdesphoto($url):
+		return $this->setdesphoto($url);
 	}
 
 	public function getValues()
@@ -71,12 +84,12 @@ class Product extends Model
 		$this->checkPhoto();
 		$values = parent::getValues();
 
-		return $values
+		return $values;
 	}
 
 	public function setPhoto($file)
 	{
-		$extension = ('.', $file['name']);
+		$extension = ('.'. $file['name']);
 		$extension = end($extension);
 
 		switch ($extension) {
@@ -99,7 +112,7 @@ class Product extends Model
 			"site".DIRECTORY_SEPARATOR.
 			"img".DIRECTORY_SEPARATOR.
 			"products".DIRECTORY_SEPARATOR.
-			$this->getidproduct()."jpg";
+			$this->getidproduct().".jpg";
 
 		imagejpeg($image, $dist);
 
