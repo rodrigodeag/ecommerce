@@ -4,6 +4,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Mailer;
 
 class Category extends Model
 {
@@ -66,9 +67,8 @@ class Category extends Model
 					SELECT a.idproduct FROM tb_products a
 					INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
 					WHERE b.idcategory = :idcategory
-				);
 			",[
-				':idcategory'=$this->getidcategory();
+				':idcategory'=>$this->getidcategory()
 			]);
 		} else {
 			$sql->select("
@@ -76,8 +76,8 @@ class Category extends Model
 					SELECT a.idproduct FROM tb_products a
 					INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
 					WHERE b.idcategory = :idcategory
-				"[
-					':idcategory'=$this->getidcategory();
+				",[
+					':idcategory'=>$this->getidcategory()
 				]);
 			}
 
@@ -86,21 +86,21 @@ class Category extends Model
 
 	public function getProductsPage($page = 1, $itemsPerPage = 3)
 	{
-		$start = ($page -1) *$itemsPerPage;
+		$start = ($page -1) * $itemsPerPage;
 
 		$sql = new Sql();
 
-		$sql->select("
+		$results = $sql->select("
 			SELECT SQL_CALC_FOUND_ROWS * FROM tb_products a
 			INNER JOIN tb_productscategories b on a.idproduct = b.idproduct
 			INNER JOIN tb_categories c on c.idcategory = b.idcategory
 			WHERE c.idcategory = :idcategory
-			LIMIT $start, $itemsPerPage;
+			LIMIT $start, $itemsPerPage
 		",[
 			':idcategory'=>$this->getidcategory()
 		]);
 
-		$$resultTotal = $sql->select("SELECT * FROM FOUND_ROWS() AS nrtotal;");
+		$resultTotal = $sql->select("SELECT * FROM FOUND_ROWS() AS nrtotal");
 
 		return [
 			'data'=>Product::checkList($results),

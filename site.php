@@ -7,7 +7,7 @@ use \Hcode\Model\Cart;
 
 $app->get('/', function() {
 
-	$products = Products::listALL();
+	$products = Product::listALL();
 
 	$page = new Page();
 
@@ -22,14 +22,14 @@ $app->get("/categories/:idcategory", function($idcategory){
 	
 	$category = new Category();
 	$category->get((int)$idcategory);
-	$pagination = $category->getProductsPage();
+	$pagination = $category->getProductsPage($page);
 	$pages = [];
 
 	for ($i=1; $i <= $pagination['pages']; $i++){
-		array_push($pages, [
+		array_push($pages,[
 			'link'=>'/categories/'.$category->getidcategory().'?page='.$i,
 			'page'=>$i
-		])
+		]);
 	}
 
 	$page = new Page();
@@ -45,7 +45,7 @@ $app->get("/products/:desurl", function($desurl){
 	$product->getFromURL($desurl);
 
 	$page = new Page();
-	$page->setTpl("product-datail",[
+	$page->setTpl("product-detail",[
 		'product'=>$product->getValues(),
 		'categories'=>$product->getCategories()
 	]);
@@ -55,10 +55,10 @@ $app->get("/cart", function(){
 
 	$cart = Cart::getFromSession();
 
-	$page = new Page();
-	$page->setTpl("cart",[
+	$page->setTpl("cart", [
 		'cart'=>$cart->getValues(),
-		'products'=>$cart->getProducts()
+		'products'=>$cart->getProducts(),
+		'error'=>Cart::getMsgError()
 	]);
 });
 
@@ -72,10 +72,7 @@ $app->get("/cart/:idproduct/add", function($idproduct){
 
 	for ($i=0; $i < $qtd; $i++) { 
 		$cart->addProduct($product);
-	}
-
-
-	$cart->addProduct($product);
+	}	
 
 	header("Location: /cart");
 	exit;
@@ -99,7 +96,7 @@ $app->get("/cart/:idproduct/remove", function($idproduct){
 	$product->get((int)$idproduct);
 
 	$cart = Cart::getFromSession();
-	$cart->removeProduct($product,);
+	$cart->removeProduct($product, true);
 
 	header("Location: /cart");
 	exit;

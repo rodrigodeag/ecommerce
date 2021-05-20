@@ -36,11 +36,10 @@ class Product extends Model
 			":vlwidth"=>$this->getvlwidth(),
 			":vlheight"=>$this->getvlheight(),
 			":vllength"=>$this->getvllength(),
-			":vlweight"=>$this->getvlweigth(),
+			":vlweight"=>$this->getvlweight(),
 			":desurl"=>$this->getdesurl()
 		));
 		$this->setData($results[0]);
-		
 	}
 
 	public function get($idproduct)
@@ -128,7 +127,7 @@ class Product extends Model
 	]);
 	}
 
-	public function getCategories($categories)
+	public function getCategories()
 	{
 		$sql = new Sql();
 
@@ -138,7 +137,7 @@ class Product extends Model
 			ON a.idcategory = b.idcategory
 			WHERE b.idproduct = :idproduct
 		",[
-			':idproduct'=>$this->getidproduct();
+			':idproduct'=>$this->getidproduct()
 		]);
 	}
 }

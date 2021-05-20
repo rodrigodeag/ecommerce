@@ -16,13 +16,13 @@ class Cart extends Model
 		$cart = new Cart();
 
 		if (isset($_SESSION[Cart::SESSION]) && (int)$_SESSION[Cart::SESSION]['idcart'] > 0) {
-			$cart->get((int)$_SESSION[Cart::SESSION]['idcart'] > 0)
+			$cart->get((int)$_SESSION[Cart::SESSION]['idcart'] > 0);
 		} else {
 			$cart->getFromSessionID();
 
 			if (!(int)$cart->getidcart() > 0) {
 				$data = [
-					'dessessionid'=>session_id();
+					'dessessionid'=>session_id()
 				];
 				if(User::checkLogin(false)){
 					$user = User::getFromSession();
@@ -35,7 +35,7 @@ class Cart extends Model
 				
 			}
 
-			return
+			return $cart;
 		}
 	}
 
@@ -91,8 +91,8 @@ class Cart extends Model
 	{
 		$sql = new Sql();
 		$sql->query("INSERT INTO tb_cartsproducts (idcart, idproduct) VALUES (:idcart, :idproduct)",[
-			':idcart'=>$this->getidcart();
-			':idproduct'=>$this->getidproduct();
+			':idcart'=>$this->getidcart(),
+			':idproduct'=>$this->getidproduct()
 		]);
 	}
 
@@ -102,13 +102,13 @@ class Cart extends Model
 
 		if ($all) {
 			$sql->query("UPDATE tb_cartsproducts SET dtremove = NOW() WHERE idcart = :idcart AND idproduct = :idproduct AND dtremove IS NULL",[
-				':idcart'=>$this->getidcart();
+				':idcart'=>$this->getidcart(),
 				':idproduct'=>$this->getidproduct()
 			]);
 		} else {
 			$sql->query("UPDATE tb_cartsproducts SET dtremove = NOW() WHERE idcart = :idcart AND idproduct = :idproduct AND dtremove IS NULL LIMIT 1",[
-				':idcart'=>$this->getidcart();
-				':idproduct'=>$this->getidproduct();
+				':idcart'=>$this->getidcart(),
+				':idproduct'=>$this->getidproduct()
 
 			]);
 
